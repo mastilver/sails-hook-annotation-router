@@ -15,7 +15,8 @@ describe('hook annotation router', function(){
 
         Sails().lift({
             hooks: {
-                'annotation-router': require('../')
+                'annotation-router': require('../'),
+                grunt: false,
             },
             log: {
                 level: 'error'
@@ -28,8 +29,6 @@ describe('hook annotation router', function(){
             if(err) return done(err);
 
             sails = _sails;
-
-
 
             return done();
         });
@@ -49,13 +48,22 @@ describe('hook annotation router', function(){
         return true;
     });
 
-    it('should have register the route', function(done){
-        //console.log(sails.config.paths.controllers);
-        console.log(sails.config.routes);
+    it('should register the getItems route', function(done){
+        request(sails.hooks.http.app)
+            .get('/item')
+            .expect(200, done);
+    });
 
+    it('should register the getItem route', function(done){
+        request(sails.hooks.http.app)
+            .get('/item/5')
+            .expect(200)
+            .expect(5, done);
+    });
+
+    it('should register controller inside a subfolder', function(done){
         request(sails.hooks.http.app)
             .get('/test')
             .expect(200, done);
-
     });
 })

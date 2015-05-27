@@ -1,12 +1,25 @@
+var path = require('path');
 
+var annotationRouter = require('annotation-router');
 
 module.exports = function(sails){
     return {
         initialize: function(callback){
 
-            sails.config.routes['GET /test'] = { controller: 'testController', action: 'getTest' };
+            var controllersFolder = sails.config.paths.controllers
+            var pattern = controllersFolder + '/**/*Controller.js';
 
-            callback();
+            annotationRouter(pattern, function(err, route){
+
+                var controllerName = path.relative(controllersFolder, route.controller.full)
+                                         .slice(0, -route.controller.ext.length);
+
+                sails.config.routes[route.method + ' ' + route.url] = {
+                    controller: controllerName,
+                    action: route.actionName,
+                };
+
+            }, callback);
         }
     };
 };
