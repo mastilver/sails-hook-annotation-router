@@ -4,7 +4,7 @@ var annotationRouter = require('annotation-router');
 
 module.exports = function(sails){
     return {
-        initialize: function(callback){
+        loadModules: function(callback){
 
             var controllersFolder = sails.config.paths.controllers;
             var pattern = controllersFolder + '/**/*Controller.js';
@@ -19,6 +19,10 @@ module.exports = function(sails){
                 sails.config.routes[route.method + ' ' + route.url] = {
                     controller: controllerName,
                     action: route.actionName,
+                };
+
+                sails.config.policies = {
+                    '*': false
                 };
 
             }, callback);

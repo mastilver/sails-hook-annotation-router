@@ -23,6 +23,10 @@ describe('hook annotation router', function(){
             },
             paths: {
                 controllers: __dirname + '/controllers',
+                policies: __dirname + '/policies',
+            },
+            policies: {
+                //'*': ['isLoggedIn']
             }
         }, function(err, _sails){
 
