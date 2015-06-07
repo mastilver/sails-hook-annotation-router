@@ -70,4 +70,10 @@ describe('hook annotation router', function(){
             .get('/test')
             .expect(200, done);
     });
+
+    it('should allow the user to access /private route', function(done){
+        request(sails.hooks.http.app)
+            .get('/private')
+            .expect(403, done);
+    })
 })

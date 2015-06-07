@@ -18,10 +18,28 @@ module.exports = function(sails){
                 // make it work for windows
                 controllerName = controllerName.split(path.sep).join('/');
 
+                var actionName = route.actionName
+
                 sails.config.routes[route.method + ' ' + route.url] = {
                     controller: controllerName,
-                    action: route.actionName,
+                    action: actionName,
                 };
+
+
+                // Handle policies
+
+                for(var policy in route.annotations){
+
+                    if(!(controllerName in sails.config.policies)){
+                        sails.config.policies[controllerName] = {};
+                    }
+
+                    if(!(actionName in sails.config.policies[controllerName])){
+                        sails.config.policies[controllerName][actionName] = [];
+                    }
+
+                    sails.config.policies[controllerName][actionName].push(policy);
+                }
             });
         }
     };

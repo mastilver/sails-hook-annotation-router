@@ -8,3 +8,10 @@ module.exports.getItems = function(req, res){
 module.exports.getItem = function(req, res){
 	res.send(+req.params.id);
 };
+
+// @isLoggedIn()
+// @httpGet()
+// @route('/private')
+module.exports.private = function(req, res){
+	res.ok();
+};
