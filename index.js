@@ -28,11 +28,24 @@ module.exports = function(sails){
 
                 // Handle policies
 
-                for(var policy in route.annotations){
+                if(!(controllerName in sails.config.policies)){
+                    sails.config.policies[controllerName] = {};
+                }
 
-                    if(!(controllerName in sails.config.policies)){
-                        sails.config.policies[controllerName] = {};
-                    }
+                if(!('*' in sails.config.policies[controllerName])){
+                    sails.config.policies[controllerName]['*'] = [];
+                }
+
+
+                // set controler policies
+                var policy;
+                for(policy in route.controller.annotations){
+                    sails.config.policies[controllerName]['*'].push(policy);
+                }
+
+
+                // set action policies
+                for(policy in route.annotations){
 
                     if(!(actionName in sails.config.policies[controllerName])){
                         sails.config.policies[controllerName][actionName] = [];

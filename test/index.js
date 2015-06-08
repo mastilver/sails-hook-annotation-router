@@ -54,13 +54,13 @@ describe('hook annotation router', function(){
 
     it('should register the getItems route', function(done){
         request(sails.hooks.http.app)
-            .get('/item')
+            .get('/items')
             .expect(200, done);
     });
 
     it('should register the getItem route', function(done){
         request(sails.hooks.http.app)
-            .get('/item/5')
+            .get('/items/5')
             .expect(200)
             .expect(5, done);
     });
@@ -71,9 +71,23 @@ describe('hook annotation router', function(){
             .expect(200, done);
     });
 
-    it('should allow the user to access /private route', function(done){
+
+
+    it('should not allow the user to access /private route', function(done){
         request(sails.hooks.http.app)
             .get('/private')
+            .expect(403, done);
+    })
+
+    it('should not allow the user to access admin/items route', function(done){
+        request(sails.hooks.http.app)
+            .get('/admin/items')
+            .expect(403, done);
+    })
+
+    it('should not allow the user to access admin/items/:id route', function(done){
+        request(sails.hooks.http.app)
+            .get('/admin/items/10')
             .expect(403, done);
     })
 })
