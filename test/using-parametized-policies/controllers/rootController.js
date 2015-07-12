@@ -15,6 +15,7 @@ module.exports = {
 	// @is('Admin')
 	// @httpGet()
 	// @route('/private')
+	// @route('/other')
 	private: function(req, res){
 		res.ok();
 	},

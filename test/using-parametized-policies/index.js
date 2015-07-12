@@ -72,4 +72,11 @@ describe('hook annotation router', function(){
             .expect(200)
             .expect('Admin', done);
     });
+
+    it('should register the other private route', function(done){
+        request(sails.hooks.http.app)
+            .get('/other')
+            .expect(200)
+            .expect('Admin', done);
+    });
 })

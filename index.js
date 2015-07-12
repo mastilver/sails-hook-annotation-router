@@ -7,7 +7,7 @@ module.exports = function(sails){
     var controllersFolder = sails.config.paths.controllers;
     var pattern = controllersFolder + '/**/*Controller.js';
 
-    var handledController = {};
+    var handledPolicies = {};
 
     return {
         configure: function(){
@@ -41,18 +41,15 @@ module.exports = function(sails){
 
 
         // Handle policies
-
-        if(!handledController[controllerName]){
-            addPolicies(controllerName, '*', route.controller.rawAnnotations);
-        }
-
+        addPolicies(controllerName, '*', route.controller.rawAnnotations);
         addPolicies(controllerName, actionName, route.rawAnnotations);
-
-        handledController[controllerName] = true;
     }
 
 
     function addPolicies(controllerName, actionName, policies){
+
+        if(haveBeenAlreadyHandled(controllerName, actionName)) return;
+
         if(!(controllerName in sails.config.policies)){
             sails.config.policies[controllerName] = {};
         }
@@ -70,4 +67,13 @@ module.exports = function(sails){
         }
     }
 
+    function haveBeenAlreadyHandled(controllerName, actionName){
+
+        if(handledPolicies[controllerName + '.' + actionName]){
+            return true;
+        }
+
+        handledPolicies[controllerName + '.' + actionName] = true;
+        return false;
+    }
 };
