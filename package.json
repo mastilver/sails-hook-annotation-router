@@ -1,6 +1,6 @@
 {
   "name": "sails-hook-annotation-router",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "sails hook which add annotation routing to controllers",
   "main": "index.js",
   "scripts": {
@@ -27,7 +27,7 @@
     "supertest": "^1.0.1"
   },
   "dependencies": {
-    "annotation-router": "^0.7.0"
+    "annotation-router": "^0.8.0"
   },
   "sails": {
     "isHook": true
