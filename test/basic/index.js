@@ -15,7 +15,7 @@ describe('hook annotation router', function(){
 
         Sails().lift({
             hooks: {
-                'annotation-router': require('../'),
+                'annotation-router': require('../../'),
                 grunt: false,
             },
             log: {
