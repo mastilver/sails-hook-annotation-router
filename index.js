@@ -7,12 +7,20 @@ module.exports = function(sails){
     var controllersFolder = sails.config.paths.controllers;
     var pattern = controllersFolder + '/**/*Controller.js';
 
+    var handledController = {};
+
     return {
         configure: function(){
 
             var routes = annotationRouter.sync(pattern)
 
             routes.map(handleRoute);
+
+            var parametizedPoliciesHook = sails.hooks['parametized-policies'];
+
+            if(!!parametizedPoliciesHook){
+                parametizedPoliciesHook.configure();
+            }
         }
     };
 
@@ -33,8 +41,14 @@ module.exports = function(sails){
 
 
         // Handle policies
-        addPolicies(controllerName, '*', route.controller.annotations);
-        addPolicies(controllerName, actionName, route.annotations);
+
+        if(!handledController[controllerName]){
+            addPolicies(controllerName, '*', route.controller.rawAnnotations);
+        }
+
+        addPolicies(controllerName, actionName, route.rawAnnotations);
+
+        handledController[controllerName] = true;
     }
 
 
@@ -43,13 +57,16 @@ module.exports = function(sails){
             sails.config.policies[controllerName] = {};
         }
 
-        for(var policy in policies){
+        for(var policyName in policies){
 
             if(!(actionName in sails.config.policies[controllerName])){
                 sails.config.policies[controllerName][actionName] = [];
             }
 
-            sails.config.policies[controllerName][actionName].push(policy);
+            for(var i = 0, len = policies[policyName].length; i < len; i++){
+                var policy = policies[policyName][i];
+                sails.config.policies[controllerName][actionName].push(policy);
+            }
         }
     }
 
